@@ -19,12 +19,11 @@ public class PessoaService {
 	
 	public Pessoa atualizar(Long codigo,Pessoa pessoa) {
 		
-		Pessoa pessoaCadastrada = this.repository.findById(codigo)
-		.orElseThrow(() -> new EmptyResultDataAccessException(1));
+		Pessoa pessoaCadastrada = buscarPessoaPorCodigo(codigo);
 		
 		BeanUtils.copyProperties(pessoa, pessoaCadastrada, "codigo");
 		return repository.save(pessoaCadastrada);		
-	}
+	}	
 	
 	public List<Pessoa> listarTodos() {
 		return repository.findAll();
@@ -42,5 +41,18 @@ public class PessoaService {
 	
 	public void remover(Long codigo) {
 		repository.deleteById(codigo);
+	}
+
+	public void atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
+		Pessoa pessoaCadastrada = buscarPessoaPorCodigo(codigo);
+		pessoaCadastrada.setAtivo(ativo);
+		
+		repository.save(pessoaCadastrada);
+	}
+	
+	private Pessoa buscarPessoaPorCodigo(Long codigo) {
+		Pessoa pessoaCadastrada = this.repository.findById(codigo)
+		.orElseThrow(() -> new EmptyResultDataAccessException(1));
+		return pessoaCadastrada;
 	}
 }

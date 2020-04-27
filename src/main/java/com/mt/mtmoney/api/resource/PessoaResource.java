@@ -69,4 +69,10 @@ public class PessoaResource {
 		
 		return ResponseEntity.ok(pessoaAtualizada); 
 	}
+	
+	@PutMapping("/{codigo}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+		service.atualizarPropriedadeAtivo(codigo,ativo);
+	}
 }

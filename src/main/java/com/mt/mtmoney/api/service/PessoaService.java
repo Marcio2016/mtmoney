@@ -50,7 +50,7 @@ public class PessoaService {
 		repository.save(pessoaCadastrada);
 	}
 	
-	private Pessoa buscarPessoaPorCodigo(Long codigo) {
+	public Pessoa buscarPessoaPorCodigo(Long codigo) {
 		Pessoa pessoaCadastrada = this.repository.findById(codigo)
 		.orElseThrow(() -> new EmptyResultDataAccessException(1));
 		return pessoaCadastrada;

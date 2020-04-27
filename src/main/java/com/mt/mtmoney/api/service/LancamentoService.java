@@ -7,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mt.mtmoney.api.model.Lancamento;
+import com.mt.mtmoney.api.model.Pessoa;
 import com.mt.mtmoney.api.repository.LancamentoRepository;
+import com.mt.mtmoney.api.service.exception.PessoaInexistenteOuInativaException;
 
 @Service
 public class LancamentoService {
 
 	@Autowired
 	private LancamentoRepository repository;
+	
+	@Autowired
+	private PessoaService pessoaService;
 	
 	public List<Lancamento> buscarTodos() {
 		return repository.findAll();
@@ -26,6 +31,12 @@ public class LancamentoService {
 	}
 	
 	public Lancamento salvar(Lancamento lancamento) {
+		
+		Pessoa pessoa = pessoaService.buscarPessoaPorCodigo(lancamento.getPessoa().getCodigo());
+		if(pessoa == null || pessoa.isInativo()) {
+			throw new PessoaInexistenteOuInativaException();
+		}
+		
 		return repository.save(lancamento);
 	}
 }

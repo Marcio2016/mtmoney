@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "lancamento")
@@ -24,23 +25,28 @@ public class Lancamento {
 	
 	private String descricao;
 	
+	@NotNull(message = "A data de vencimento é obrigatória!")
 	@Column(name = "data_vencimento")
 	private LocalDate dataVencimento;
 	
 	@Column(name = "data_pagamento")
 	private LocalDate dataPagamento;
 	
+	@NotNull(message = "O valor é obrigatório!")
 	private BigDecimal valor;
 	
 	private String observacao;
 	
+	@NotNull(message = "Tipo é obrigatório!")
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipo;
 	
+	@NotNull(message = "O codigo da categoria é obrigatório!")
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria")
 	private Categoria categoria;
 	
+	@NotNull(message = "O codigo da pessoa é obrigatório!")
 	@ManyToOne
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pessoa;	

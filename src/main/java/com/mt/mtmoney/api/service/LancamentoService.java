@@ -24,4 +24,8 @@ public class LancamentoService {
 		
 		return lancamento;
 	}
+	
+	public Lancamento salvar(Lancamento lancamento) {
+		return repository.save(lancamento);
+	}
 }

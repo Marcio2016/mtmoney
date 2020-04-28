@@ -1,11 +1,12 @@
 package com.mt.mtmoney.api.repository.lancamento;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.mt.mtmoney.api.model.Lancamento;
 import com.mt.mtmoney.api.repository.filter.LancamentoFilter;
 
 public interface LancamentoRepositoryQuery {
 
-	public List<Lancamento> filtrar(LancamentoFilter filter);
+	public Page<Lancamento> filtrar(LancamentoFilter filter, Pageable page);
 }

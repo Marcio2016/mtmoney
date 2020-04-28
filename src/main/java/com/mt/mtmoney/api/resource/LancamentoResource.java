@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mt.mtmoney.api.evento.RecursoCriadoEvent;
 import com.mt.mtmoney.api.exceptionhandler.MtmoneyExceptionHandler.Erro;
 import com.mt.mtmoney.api.model.Lancamento;
+import com.mt.mtmoney.api.repository.LancamentoRepository;
+import com.mt.mtmoney.api.repository.filter.LancamentoFilter;
 import com.mt.mtmoney.api.service.LancamentoService;
 import com.mt.mtmoney.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -35,14 +37,17 @@ public class LancamentoResource {
 	private LancamentoService service;
 	
 	@Autowired
+	private LancamentoRepository repository;
+	
+	@Autowired
 	private ApplicationEventPublisher publisher;
 	
 	@Autowired
 	private MessageSource messageSource;
 	
 	@GetMapping
-	public List<Lancamento> buscarTodos() {
-		return service.buscarTodos();
+	public List<Lancamento> pesquisar(LancamentoFilter filter) {
+		return repository.filtrar(filter);
 	}
 	
 	@GetMapping("/{codigo}")

@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.mt.mtmoney.api.model.Lancamento;
 import com.mt.mtmoney.api.repository.filter.LancamentoFilter;
+import com.mt.mtmoney.api.repository.projection.ResumoLancamento;
 
 public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 
@@ -37,7 +38,29 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		adicionarRestricoesdePaginacao(query,page);
 		
 		return new PageImpl<>(query.getResultList(), page, total(filter)) ;
-	}	
+	}
+	
+	@Override
+	public Page<ResumoLancamento> resumir(LancamentoFilter filter, Pageable page) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<ResumoLancamento> criteria = builder.createQuery(ResumoLancamento.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
+		
+		criteria.select(builder.construct(ResumoLancamento.class
+				, root.get("codigo"),root.get("descricao")
+				, root.get("dataVencimento"),root.get("dataPagamento")
+				, root.get("valor"),root.get("tipo")
+				, root.get("categoria").get("nome")
+				, root.get("pessoa").get("nome")));
+		
+		Predicate[] predicate = criarRestricoes(filter,builder,root);
+		criteria.where(predicate);
+		
+		TypedQuery<ResumoLancamento> query = manager.createQuery(criteria);
+		adicionarRestricoesdePaginacao(query,page);
+		
+		return new PageImpl<>(query.getResultList(), page, total(filter)) ;
+	}
 
 	private Predicate[] criarRestricoes(LancamentoFilter filter, CriteriaBuilder builder, Root<Lancamento> root) {
 		
@@ -60,7 +83,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		return predicate.toArray(new Predicate[predicate.size()]);
 	}
 	
-	private void adicionarRestricoesdePaginacao(TypedQuery<Lancamento> query, Pageable page) {
+	private void adicionarRestricoesdePaginacao(TypedQuery<?> query, Pageable page) {
 		int paginaAtual = page.getPageNumber();
 		int totalRegistrosPorPagina = page.getPageSize();
 		int primeiroRegistroDaPagina = paginaAtual * totalRegistrosPorPagina;
@@ -80,5 +103,4 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 		criteria.select(builder.count(root));
 		return manager.createQuery(criteria).getSingleResult();
 	}
-
 }

@@ -31,6 +31,7 @@ import com.mt.mtmoney.api.exceptionhandler.MtmoneyExceptionHandler.Erro;
 import com.mt.mtmoney.api.model.Lancamento;
 import com.mt.mtmoney.api.repository.LancamentoRepository;
 import com.mt.mtmoney.api.repository.filter.LancamentoFilter;
+import com.mt.mtmoney.api.repository.projection.ResumoLancamento;
 import com.mt.mtmoney.api.service.LancamentoService;
 import com.mt.mtmoney.api.service.exception.PessoaInexistenteOuInativaException;
 
@@ -54,6 +55,12 @@ public class LancamentoResource {
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
 	public Page<Lancamento> pesquisar(LancamentoFilter filter, Pageable page) {
 		return repository.filtrar(filter,page);
+	}
+	
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO')")
+	public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return repository.resumir(lancamentoFilter, pageable);
 	}
 	
 	@GetMapping("/{codigo}")

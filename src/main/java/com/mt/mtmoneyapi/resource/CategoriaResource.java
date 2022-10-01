@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class CategoriaResource {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Categoria criar(@RequestBody Categoria categoria){
+    public Categoria criar(@Valid @RequestBody Categoria categoria){
        return categoriaRepository.save(categoria);
     }
 }

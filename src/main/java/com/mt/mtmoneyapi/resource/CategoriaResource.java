@@ -35,4 +35,10 @@ public class CategoriaResource {
     public Categoria criar(@Valid @RequestBody Categoria categoria){
        return categoriaRepository.save(categoria);
     }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long codigo){
+        categoriaRepository.deleteById(codigo);
+    }
 }
